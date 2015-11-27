@@ -4,13 +4,15 @@ using System.Collections.Generic;
 
 namespace Schmup
 {
-    public class Ship : MonoBehaviour
+    public class MoveableObject : MonoBehaviour
     {
         [SerializeField]
         private float m_Speed;
-
-        [SerializeField]
-        private List<Gun> m_Guns;
+        public float Speed
+        {
+            get { return m_Speed; }
+            set { m_Speed = value; }
+        }
 
         public void Move(float dirX, float dirY)
         {
@@ -19,22 +21,5 @@ namespace Schmup
 
             transform.Translate(deltaMovement, Space.World);
         }
-
-        public void Fire()
-        {
-            if (m_Guns == null)
-                return;
-
-            if (m_Guns.Count == 0)
-                return;
-
-            //Fire all our guns
-            foreach (Gun gun in m_Guns)
-            {
-                gun.Fire();
-            }
-        }
-
-        //Collisions
     }
 }

@@ -3,13 +3,20 @@ using System.Collections;
 
 namespace Schmup
 {
-    public class Bullet : PoolableObject
+    public class Bullet : PoolableObject, IDamageDealer
     {
         private float m_Speed;
         public float Speed
         {
             get { return m_Speed; }
             set { m_Speed = value; }
+        }
+
+        private int m_Damage;
+        public int Damage
+        {
+            get { return m_Damage; }
+            set { m_Damage = value; }
         }
 
         private MovePattern m_MovePattern;
@@ -95,5 +102,15 @@ namespace Schmup
         }
 
         #endregion
+
+        #region IDamageDealer
+
+        public int GetDamage()
+        {
+            return m_Damage;
+        }
+
+        #endregion
+
     }
 }

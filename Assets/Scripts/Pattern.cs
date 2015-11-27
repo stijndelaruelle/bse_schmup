@@ -23,6 +23,27 @@ namespace Schmup
         }
 
         [SerializeField]
+        private float m_Speed;
+        public float Speed
+        {
+            get { return m_Speed; }
+        }
+
+        [SerializeField]
+        private int m_Damage;
+        public int Damage
+        {
+            get { return m_Damage; }
+        }
+
+        [SerializeField]
+        private float m_ReloadTime;
+        public float ReloadTime
+        {
+            get { return m_ReloadTime; }
+        }
+
+        [SerializeField]
         private MovePattern m_MovePattern;
         public MovePattern MovePattern
         {
@@ -48,20 +69,6 @@ namespace Schmup
         public float Angle
         {
             get { return m_Angle; }
-        }
-
-        [SerializeField]
-        private float m_Speed;
-        public float Speed
-        {
-            get { return m_Speed; }
-        }
-
-        [SerializeField]
-        private float m_ReloadTime;
-        public float ReloadTime
-        {
-            get { return m_ReloadTime; }
         }
     }
 

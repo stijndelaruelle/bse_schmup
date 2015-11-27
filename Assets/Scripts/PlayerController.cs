@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Schmup
 {
@@ -9,17 +10,29 @@ namespace Schmup
         private int m_PlayerID;
 
         [SerializeField]
-        private Ship m_Ship;
+        private MoveableObject m_MoveableObject;
+
+        [SerializeField]
+        private List<Gun> m_Guns;
+
+        [SerializeField]
+        private DamageableObject m_DamageableObject;
 
         private void Awake()
         {
-            if (m_Ship == null)
-                Debug.LogError("Player " + m_PlayerID + " does not have a associated ship!");
+            if (m_MoveableObject == null)
+                Debug.LogError("Player " + m_PlayerID + " does not have a associated moveable object!");
+        }
+
+        private void Start()
+        {
+            m_DamageableObject.DamageEvent += OnDamage;
+            m_DamageableObject.DeathEvent += OnDeath;
         }
 
         private void Update()
         {
-            if (m_Ship == null)
+            if (m_MoveableObject == null)
                 return;
 
             HandleMovement();
@@ -42,16 +55,38 @@ namespace Schmup
             if (vertInput == 0.0f)
                 vertInput = vertInputKeyboard;
 
-            m_Ship.Move(horizInput, vertInput);
+            m_MoveableObject.Move(horizInput, vertInput);
         }
 
         private void HandleShooting()
         {
+            if (m_Guns == null)
+                return;
+
+            if (m_Guns.Count == 0)
+                return;
+
             //We don't care about reloadtimes, those are for the gun
             bool fireInput = Input.GetButton("Fire_Player" + m_PlayerID);
 
             if (fireInput)
-                m_Ship.Fire();
+            {
+                //Fire all our guns
+                foreach (Gun gun in m_Guns)
+                {
+                    gun.Fire();
+                }
+            }
+        }
+
+        private void OnDamage()
+        {
+            Debug.Log("The player took damage!");
+        }
+
+        private void OnDeath()
+        {
+            Debug.Log("The player died!");
         }
     }
 }

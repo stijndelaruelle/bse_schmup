@@ -68,6 +68,7 @@ namespace Schmup
             {
                 Bullet bullet = (Bullet)obj;
                 bullet.Speed = bulletDefinition.Speed;
+                bullet.Damage = bulletDefinition.Damage;
                 bullet.MovePattern = bulletDefinition.MovePattern;
                 bullet.Frequency = bulletDefinition.Frequency;
                 bullet.Amplitude = bulletDefinition.Amplitude;
