@@ -5,7 +5,7 @@ using System;
 namespace Schmup
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class DamageableObject : MonoBehaviour, IDamageable
+    public class DamageableObject : MonoBehaviour, IDamageable, IScoreable
     {
         //Datamembers
         [SerializeField]
@@ -23,6 +23,16 @@ namespace Schmup
         {
             get { return m_Health; }
         }
+
+        [SerializeField]
+        private int m_Score;
+        public int Score
+        {
+            get { return m_Score; }
+        }
+
+        [SerializeField]
+        private string m_ExcludedTag = "";
 
         //Events
         private event Action m_HealEvent;
@@ -46,6 +56,13 @@ namespace Schmup
             set { m_DeathEvent = value; }
         }
 
+        private event Action<int> m_ScoreEvent;
+        public Action<int> ScoreEvent
+        {
+            get { return m_ScoreEvent; }
+            set { m_ScoreEvent = value; }
+        }
+
         //Functions
 	    private void Start()
         {
@@ -57,6 +74,9 @@ namespace Schmup
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (other.tag == m_ExcludedTag)
+                return;
+
             //Check if the object that we hit was a damagedealer
             IDamageDealer damageDealer = other.gameObject.GetComponent<IDamageDealer>();
 
@@ -64,6 +84,7 @@ namespace Schmup
             {
                 int damage = damageDealer.GetDamage();
                 Damage(damage);
+                damageDealer.DealtDamage();
             }
         }
 
@@ -102,8 +123,12 @@ namespace Schmup
 
         private void HandleDeath()
         {
+            Debug.Log(gameObject.name + " DIED!");
             if (m_DeathEvent != null)
                 m_DeathEvent();
+
+            if (m_ScoreEvent != null && m_Score > 0)
+                m_ScoreEvent(m_Score);
         }
 
         public bool IsAlive()

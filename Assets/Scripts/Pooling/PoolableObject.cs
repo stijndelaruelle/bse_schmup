@@ -7,7 +7,7 @@ namespace Schmup
     public abstract class PoolableObject : MonoBehaviour
     {
         public abstract void Activate(Vector3 pos, Quaternion rot);
-        public abstract void Reset();
+        public abstract void Deactivate();
         public abstract bool IsAvailable();
     }
 }

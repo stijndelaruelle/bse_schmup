@@ -13,10 +13,10 @@ namespace Schmup
         private MoveableObject m_MoveableObject;
 
         [SerializeField]
-        private List<Gun> m_Guns;
+        private DamageableObject m_DamageableObject;
 
         [SerializeField]
-        private DamageableObject m_DamageableObject;
+        private List<Gun> m_Guns;
 
         private void Awake()
         {
@@ -81,7 +81,7 @@ namespace Schmup
 
         private void OnDamage()
         {
-            Debug.Log("The player took damage!");
+            //Debug.Log("The player took damage!");
         }
 
         private void OnDeath()

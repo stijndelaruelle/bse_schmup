@@ -43,7 +43,7 @@ namespace Schmup
             else
             {
                 instance.gameObject.transform.parent = this.transform;
-                instance.Reset();
+                instance.Deactivate();
                 m_PooledObjects.Add(instance);
                 return instance;
             }
@@ -88,7 +88,7 @@ namespace Schmup
         {
             for (int i = 0; i < m_PooledObjects.Count; ++i)
             {
-                m_PooledObjects[i].Reset();
+                m_PooledObjects[i].Deactivate();
             }
         }
 

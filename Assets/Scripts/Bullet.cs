@@ -77,7 +77,7 @@ namespace Schmup
         {
             Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
             if (viewPos.x < 0.0f || viewPos.x > 1.0f || viewPos.y < 0.0f || viewPos.y > 1.0f)
-                Reset();
+                Deactivate();
         }
 
         #region PoolableObject
@@ -90,7 +90,7 @@ namespace Schmup
             gameObject.SetActive(true);
         }
 
-        public override void Reset()
+        public override void Deactivate()
         {
             gameObject.SetActive(false);
             m_Timer = 0.0f;
@@ -108,6 +108,12 @@ namespace Schmup
         public int GetDamage()
         {
             return m_Damage;
+        }
+
+        public void DealtDamage()
+        {
+            //Spawn particle effect etc.
+            Deactivate();
         }
 
         #endregion

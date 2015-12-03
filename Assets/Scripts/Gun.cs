@@ -27,6 +27,11 @@ namespace Schmup
 
         public void Fire()
         {
+            //Don't shoot if we're off screen
+            Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
+            if (viewPos.x < 0.0f || viewPos.x > 1.0f || viewPos.y < 0.0f || viewPos.y > 1.0f)
+                return;
+
             if (m_Pattern == null || m_IsReloading)
                 return;
 
@@ -72,6 +77,9 @@ namespace Schmup
                 bullet.MovePattern = bulletDefinition.MovePattern;
                 bullet.Frequency = bulletDefinition.Frequency;
                 bullet.Amplitude = bulletDefinition.Amplitude;
+
+                //Set the tag
+                bullet.gameObject.tag = gameObject.tag;
             }
         }
 
