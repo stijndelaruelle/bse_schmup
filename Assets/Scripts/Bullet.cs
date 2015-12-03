@@ -5,6 +5,14 @@ namespace Schmup
 {
     public class Bullet : PoolableObject, IDamageDealer
     {
+        [SerializeField]
+        private SpriteRenderer m_SpriteRenderer;
+        public Sprite Sprite
+        {
+            get { return m_SpriteRenderer.sprite; }
+            set { m_SpriteRenderer.sprite = value; }
+        }
+
         private float m_Speed;
         public float Speed
         {

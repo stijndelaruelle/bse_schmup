@@ -78,6 +78,9 @@ namespace Schmup
                 bullet.Frequency = bulletDefinition.Frequency;
                 bullet.Amplitude = bulletDefinition.Amplitude;
 
+                if (bulletDefinition.Sprite != null)
+                    bullet.Sprite = bulletDefinition.Sprite;
+
                 //Set the tag
                 bullet.gameObject.tag = gameObject.tag;
             }

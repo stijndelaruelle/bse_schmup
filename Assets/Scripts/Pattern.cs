@@ -16,10 +16,10 @@ namespace Schmup
     public class BulletSpawnDefinition
     {
         [SerializeField]
-        private Texture2D m_Texture;
-        public Texture2D Texture
+        private Sprite m_Sprite;
+        public Sprite Sprite
         {
-            get { return m_Texture; }
+            get { return m_Sprite; }
         }
 
         [SerializeField]

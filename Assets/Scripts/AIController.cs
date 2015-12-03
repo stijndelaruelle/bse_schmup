@@ -13,6 +13,9 @@ namespace Schmup
         private DamageableObject m_DamageableObject;
 
         [SerializeField]
+        private Pool m_ParticlePool;
+
+        [SerializeField]
         private List<Gun> m_Guns;
 
         private void Awake()
@@ -65,8 +68,10 @@ namespace Schmup
 
         private void OnDeath()
         {
-            Debug.Log(gameObject.name + " died!");
-            gameObject.active = false;
+            if (m_ParticlePool)
+                m_ParticlePool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
+
+            gameObject.SetActive(false);
         }
     }
 }
