@@ -26,6 +26,13 @@ namespace Schmup
             //If the pattern isn't valid, don't use it or we'll get into trouble.
             if (m_Pattern != null && !m_Pattern.IsPatternValid())
                 m_Pattern = null;
+
+            GlobalGameManager.Instance.GameResetEvent += OnGameReset;
+        }
+
+        private void OnDestroy()
+        {
+            GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
         }
 
         public void Fire()
@@ -113,6 +120,12 @@ namespace Schmup
         {
             Vector3 forward = transform.TransformDirection(Vector3.up) * 10;
             Debug.DrawRay(transform.position, forward, Color.yellow);
+        }
+
+        private void OnGameReset()
+        {
+            m_CurrentBulletID = 0;
+            m_IsReloading = false;
         }
     }
 }

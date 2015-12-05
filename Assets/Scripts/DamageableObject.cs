@@ -64,13 +64,31 @@ namespace Schmup
         }
 
         //Functions
+        private void Awake()
+        {
+            m_Health = m_MaxHealth;
+        }
+
 	    private void Start()
         {
 	        if (m_Collider == null)
                 Debug.LogError("DamagealbeObject doesn't contain a collider!");
 
-            m_Health = m_MaxHealth;
+            GlobalGameManager.Instance.GameResetEvent += OnGameReset;
 	    }
+
+        private void OnDestroy()
+        {
+            GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
+        }
+
+        private void OnGameReset()
+        {
+            m_Health = m_MaxHealth;
+
+            if (m_HealEvent != null)
+                m_HealEvent();
+        }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -123,7 +141,6 @@ namespace Schmup
 
         private void HandleDeath()
         {
-            Debug.Log(gameObject.name + " DIED!");
             if (m_DeathEvent != null)
                 m_DeathEvent();
 

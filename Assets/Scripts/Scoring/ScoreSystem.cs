@@ -43,19 +43,22 @@ namespace Schmup
 
         private void Start()
         {
+            GlobalGameManager.Instance.GameResetEvent += OnGameReset;
+
             //Super duper lame, fix!
             m_Scoreables = GameObject.FindObjectsOfType<DamageableObject>();
             
 
             foreach (IScoreable scoreable in m_Scoreables)
             {
-                
                 scoreable.ScoreEvent += OnScore;
             }
         }
 
         private void OnDestroy()
         {
+            GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
+
             foreach (IScoreable scoreable in m_Scoreables)
             {
                 scoreable.ScoreEvent -= OnScore;
@@ -68,6 +71,22 @@ namespace Schmup
 
             if (m_TotalScoreUpdateEvent != null)
                 m_TotalScoreUpdateEvent(m_TotalScore);
+        }
+
+        private void OnGameReset()
+        {
+            m_TotalScore = 0;
+            m_CurrentScore = 0;
+            m_Multiplier = 0;
+
+            if (m_TotalScoreUpdateEvent != null)
+                m_TotalScoreUpdateEvent(m_TotalScore);
+
+            if (m_CurrentScoreUpdateEvent != null)
+                m_CurrentScoreUpdateEvent(m_TotalScore);
+
+            if (m_MultiplierUpdateEvent != null)
+                m_MultiplierUpdateEvent(m_TotalScore);
         }
     }
 }

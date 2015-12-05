@@ -54,6 +54,16 @@ namespace Schmup
 
         private float m_Timer;
 
+        private void Start()
+        {
+            GlobalGameManager.Instance.GameResetEvent += OnGameReset;
+        }
+
+        private void OnDestroy()
+        {
+            GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
+        }
+
         private void Update()
         {
             HandleMovement();
@@ -138,5 +148,10 @@ namespace Schmup
         }
 
         #endregion
+
+        private void OnGameReset()
+        {
+            Deactivate();
+        }
     }
 }

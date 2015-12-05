@@ -13,15 +13,13 @@ namespace Schmup
         private DamageableObject m_DamageableObject;
 
         [SerializeField]
-        private Pool m_ParticlePool;
+        private Pool m_DeathEffectPool;
 
         [SerializeField]
         private List<Gun> m_Guns;
 
         private void Awake()
         {
-            if (m_MoveableObject == null)
-                Debug.LogError("AI " + gameObject.name + " does not have a associated moveable object!");
         }
 
         private void Start()
@@ -41,6 +39,9 @@ namespace Schmup
 
         private void HandleMovement()
         {
+            if (m_MoveableObject == null)
+                return;
+
             float horizInput = 0.0f;
             float vertInput = -1.0f;
 
@@ -68,8 +69,8 @@ namespace Schmup
 
         private void OnDeath()
         {
-            if (m_ParticlePool)
-                m_ParticlePool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
+            if (m_DeathEffectPool)
+                m_DeathEffectPool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
 
             gameObject.SetActive(false);
         }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace Schmup
 {
@@ -16,7 +17,18 @@ namespace Schmup
         private DamageableObject m_DamageableObject;
 
         [SerializeField]
+        private Pool m_DeathEffectPool;
+
+        [SerializeField]
         private List<Gun> m_Guns;
+
+        private event Action m_DeathEvent;
+        public Action DeathEvent
+        {
+            get { return m_DeathEvent; }
+            set { m_DeathEvent = value; }
+        }
+
 
         private void Awake()
         {
@@ -86,7 +98,13 @@ namespace Schmup
 
         private void OnDeath()
         {
-            Debug.Log("The player died!");
+            if (m_DeathEvent != null)
+                m_DeathEvent();
+
+            if (m_DeathEffectPool)
+                m_DeathEffectPool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
+
+            gameObject.SetActive(false);
         }
     }
 }

@@ -81,6 +81,13 @@ namespace Schmup
                 m_DisplayedScore += diff;
                 m_Text.text = m_DisplayedScore.ToString("000000");
             }
+            
+            //Mostly used when the game is reset
+            if (m_TargetScore < m_DisplayedScore)
+            {
+                m_DisplayedScore = m_TargetScore;
+                m_Text.text = m_DisplayedScore.ToString("000000");
+            }
         }
     }
 }

@@ -10,6 +10,16 @@ namespace Schmup
         private float m_Timer = 0.0f;
         private Transform m_Parent = null;
 
+        private void Start()
+        {
+            GlobalGameManager.Instance.GameResetEvent += OnGameReset;
+        }
+
+        private void OnDestroy()
+        {
+            GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
+        }
+
         private void Update()
         {
             m_Timer += Time.deltaTime;
@@ -46,5 +56,10 @@ namespace Schmup
         }
 
         #endregion
+
+        private void OnGameReset()
+        {
+            Deactivate();
+        }
     }
 }
