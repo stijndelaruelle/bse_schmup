@@ -15,6 +15,9 @@ namespace Schmup
         [SerializeField]
         private Pattern m_Pattern;
 
+        [SerializeField]
+        private AudioSource m_FireSound;
+
         private int m_CurrentBulletID;
         private bool m_IsReloading;
 
@@ -84,6 +87,9 @@ namespace Schmup
                 //Set the tag
                 bullet.gameObject.tag = gameObject.tag;
             }
+
+            if (m_FireSound != null)
+                m_FireSound.Play();
         }
 
         private void Reload(float reloadTime)

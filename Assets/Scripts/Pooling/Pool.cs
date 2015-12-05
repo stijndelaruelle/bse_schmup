@@ -43,6 +43,7 @@ namespace Schmup
             else
             {
                 instance.gameObject.transform.parent = this.transform;
+                instance.Initialize();
                 instance.Deactivate();
                 m_PooledObjects.Add(instance);
                 return instance;

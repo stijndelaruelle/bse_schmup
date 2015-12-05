@@ -7,6 +7,10 @@ namespace Schmup
     {
         [SerializeField]
         private SpriteRenderer m_SpriteRenderer;
+
+        [SerializeField]
+        private Pool m_HitEffectPool;
+
         public Sprite Sprite
         {
             get { return m_SpriteRenderer.sprite; }
@@ -90,6 +94,12 @@ namespace Schmup
 
         #region PoolableObject
 
+        public override void Initialize()
+        {
+            //STIJN: FIX, DIRTY
+            m_HitEffectPool = GameObject.Find("HitEffectPool").GetComponent<Pool>();
+        }
+
         public override void Activate(Vector3 pos, Quaternion rot)
         {
             gameObject.transform.position = pos;
@@ -118,13 +128,15 @@ namespace Schmup
             return m_Damage;
         }
 
-        public void DealtDamage()
+        public void HadContact(GameObject go)
         {
-            //Spawn particle effect etc.
+            //Find the contact point
+            //RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up * -1.0f);
+            PoolableObject effect = m_HitEffectPool.ActivateAvailableObject(transform.position, transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+            effect.transform.parent = go.transform;
             Deactivate();
         }
 
         #endregion
-
     }
 }

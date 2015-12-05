@@ -84,7 +84,7 @@ namespace Schmup
             {
                 int damage = damageDealer.GetDamage();
                 Damage(damage);
-                damageDealer.DealtDamage();
+                damageDealer.HadContact(gameObject);
             }
         }
 

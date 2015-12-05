@@ -6,6 +6,6 @@ namespace Schmup
     public interface IDamageDealer
     {
         int GetDamage();
-        void DealtDamage();
+        void HadContact(GameObject go);
     }
 }

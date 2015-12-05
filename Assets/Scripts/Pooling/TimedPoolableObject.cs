@@ -8,6 +8,7 @@ namespace Schmup
         [SerializeField]
         private float m_DisableTime = 1.0f;
         private float m_Timer = 0.0f;
+        private Transform m_Parent = null;
 
         private void Update()
         {
@@ -19,6 +20,11 @@ namespace Schmup
 
         #region PoolableObject
 
+        public override void Initialize()
+        {
+            m_Parent = transform.parent;
+        }
+
         public override void Activate(Vector3 pos, Quaternion rot)
         {
             gameObject.transform.position = pos;
@@ -29,6 +35,7 @@ namespace Schmup
 
         public override void Deactivate()
         {
+            transform.parent = m_Parent;
             gameObject.SetActive(false);
             m_Timer = 0.0f;
         }
