@@ -10,13 +10,13 @@ namespace Schmup
         private Pool m_BulletPool;
 
         [SerializeField]
+        private Pool m_FireEffectPool;
+
+        [SerializeField]
         private bool m_RotateTowardsPlayer;
 
         [SerializeField]
         private Pattern m_Pattern;
-
-        [SerializeField]
-        private AudioSource m_FireSound;
 
         private int m_CurrentBulletID;
         private bool m_IsReloading;
@@ -88,8 +88,11 @@ namespace Schmup
                 bullet.gameObject.tag = gameObject.tag;
             }
 
-            if (m_FireSound != null)
-                m_FireSound.Play();
+            if (m_FireEffectPool)
+            {
+                PoolableObject poolableObject = m_FireEffectPool.ActivateAvailableObject(transform.position, transform.rotation);
+                poolableObject.transform.parent = this.transform;
+            }
         }
 
         private void Reload(float reloadTime)
