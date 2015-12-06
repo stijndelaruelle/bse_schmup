@@ -11,7 +11,7 @@ namespace Schmup
         private int m_PlayerID;
 
         [SerializeField]
-        private MoveableObject m_MoveableObject;
+        private MoveToDirection m_MoveableObject;
 
         [SerializeField]
         private DamageableObject m_DamageableObject;
@@ -67,7 +67,8 @@ namespace Schmup
             if (vertInput == 0.0f)
                 vertInput = vertInputKeyboard;
 
-            m_MoveableObject.Move(horizInput, vertInput);
+            m_MoveableObject.Direction = new Vector2(horizInput, vertInput);
+            m_MoveableObject.Move();
         }
 
         private void HandleShooting()

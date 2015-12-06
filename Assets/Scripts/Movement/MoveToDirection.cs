@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Schmup
 {
-    public class MoveableObject : MonoBehaviour
+    public class MoveToDirection : MoveableObject
     {
         [SerializeField]
         private float m_Speed;
@@ -14,9 +14,17 @@ namespace Schmup
             set { m_Speed = value; }
         }
 
-        public void Move(float dirX, float dirY)
+        [SerializeField]
+        private Vector2 m_Direction;
+        public Vector2 Direction
         {
-            Vector3 velocity = new Vector3(dirX * m_Speed, dirY * m_Speed, 0.0f);
+            get { return m_Direction; }
+            set { m_Direction = value; }
+        }
+
+        public override void Move()
+        {
+            Vector3 velocity = new Vector3(m_Direction.x * m_Speed, m_Direction.y * m_Speed, 0.0f);
             Vector3 deltaMovement = velocity * Time.deltaTime;
 
             transform.Translate(deltaMovement, Space.World);

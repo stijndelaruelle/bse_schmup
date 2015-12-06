@@ -13,9 +13,6 @@ namespace Schmup
         private Pool m_FireEffectPool;
 
         [SerializeField]
-        private bool m_RotateTowardsPlayer;
-
-        [SerializeField]
         private Pattern m_Pattern;
 
         private int m_CurrentBulletID;
@@ -32,7 +29,8 @@ namespace Schmup
 
         private void OnDestroy()
         {
-            GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
+            if (GlobalGameManager.Instance != null)
+                GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
         }
 
         public void Fire()

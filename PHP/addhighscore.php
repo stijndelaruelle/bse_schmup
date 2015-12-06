@@ -23,6 +23,6 @@
     }
     else
     {
-        echo("Hashes din't match!");
+        echo("Hashes didn't match!");
     } 
 ?>

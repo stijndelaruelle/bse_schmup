@@ -7,7 +7,10 @@ namespace Schmup
     public class AIController : MonoBehaviour
     {
         [SerializeField]
-        private MoveableObject m_MoveableObject;
+        private List<MoveableObject> m_MoveableObjects;
+
+        [SerializeField]
+        private List<Gun> m_Guns;
 
         [SerializeField]
         private DamageableObject m_DamageableObject;
@@ -15,8 +18,7 @@ namespace Schmup
         [SerializeField]
         private Pool m_DeathEffectPool;
 
-        [SerializeField]
-        private List<Gun> m_Guns;
+
 
         private void Awake()
         {
@@ -30,22 +32,23 @@ namespace Schmup
 
         private void Update()
         {
-            if (m_MoveableObject == null)
-                return;
-
             HandleMovement();
             HandleShooting();
         }
 
         private void HandleMovement()
         {
-            if (m_MoveableObject == null)
+            if (m_MoveableObjects == null)
                 return;
 
-            float horizInput = 0.0f;
-            float vertInput = -1.0f;
+            if (m_MoveableObjects.Count == 0)
+                return;
 
-            m_MoveableObject.Move(horizInput, vertInput);
+            //Fire all our guns
+            foreach (MoveableObject moveableObject in m_MoveableObjects)
+            {
+                moveableObject.Move();
+            }
         }
 
         private void HandleShooting()

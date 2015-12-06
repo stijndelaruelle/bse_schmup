@@ -10,7 +10,7 @@ namespace Schmup
 
 	    private void Update()
         {
-            m_MoveableObject.Move(0.0f, 1.0f);
+            m_MoveableObject.Move();
 	    }
     }
 }
