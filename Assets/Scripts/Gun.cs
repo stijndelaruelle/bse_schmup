@@ -24,6 +24,11 @@ namespace Schmup
             if (m_Pattern != null && !m_Pattern.IsPatternValid())
                 m_Pattern = null;
 
+            if (m_BulletPool == null)
+            {
+                Debug.LogWarning("Gun doesn't have a bulletpool!", gameObject);
+            }
+
             GlobalGameManager.Instance.GameResetEvent += OnGameReset;
         }
 
@@ -35,6 +40,9 @@ namespace Schmup
 
         public void Fire()
         {
+            if (!gameObject.activeSelf || m_BulletPool == null)
+                return;
+
             //Don't shoot if we're off screen
             Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
             if (viewPos.x < 0.0f || viewPos.x > 1.0f || viewPos.y < 0.0f || viewPos.y > 1.0f)

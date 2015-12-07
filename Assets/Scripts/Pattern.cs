@@ -8,7 +8,9 @@ namespace Schmup
     {
         Linear,
         Sinus,
-        Cosinus
+        Cosinus,
+        MinSinus,
+        MinCosinus
     }
 
     //Structs don't serialize well in Unity
