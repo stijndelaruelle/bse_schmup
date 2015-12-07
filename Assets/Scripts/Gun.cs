@@ -68,10 +68,10 @@ namespace Schmup
             }
         }
 
-        private void InitializeBullet(BulletSpawnDefinition bulletDefinition)
+        private void InitializeBullet(BulletSpawnDefinition bulletSpawnDefinition)
         {
             Quaternion currentRotation = transform.rotation;
-            Quaternion addedRotation = Quaternion.AngleAxis(-bulletDefinition.Angle, new Vector3(0.0f, 0.0f, 1.0f));
+            Quaternion addedRotation = Quaternion.AngleAxis(-bulletSpawnDefinition.Angle, new Vector3(0.0f, 0.0f, 1.0f));
             Quaternion totalRotation = currentRotation * addedRotation;
 
             //FIX super dirty, try to use templates!
@@ -80,14 +80,14 @@ namespace Schmup
             if (m_BulletPool.IsPoolType<Bullet>())
             {
                 Bullet bullet = (Bullet)obj;
-                bullet.Speed = bulletDefinition.Speed;
-                bullet.Damage = bulletDefinition.Damage;
-                bullet.MovePattern = bulletDefinition.MovePattern;
-                bullet.Frequency = bulletDefinition.Frequency;
-                bullet.Amplitude = bulletDefinition.Amplitude;
+                bullet.Speed = bulletSpawnDefinition.BulletDefinition.Speed;
+                bullet.Damage = bulletSpawnDefinition.BulletDefinition.Damage;
+                bullet.MovePattern = bulletSpawnDefinition.MovePattern;
+                bullet.Frequency = bulletSpawnDefinition.Frequency;
+                bullet.Amplitude = bulletSpawnDefinition.Amplitude;
 
-                if (bulletDefinition.Sprite != null)
-                    bullet.Sprite = bulletDefinition.Sprite;
+                if (bulletSpawnDefinition.BulletDefinition.Sprite != null)
+                    bullet.Sprite = bulletSpawnDefinition.BulletDefinition.Sprite;
 
                 //Set the tag
                 bullet.gameObject.tag = gameObject.tag;

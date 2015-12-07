@@ -12,7 +12,11 @@ namespace Schmup
         public float Speed
         {
             get { return m_Speed; }
-            set { m_Speed = value; }
+            set
+            {
+                m_Speed = value;
+                CalculateDuration();
+            }
         }
 
         private float m_Duration;
@@ -25,7 +29,14 @@ namespace Schmup
                 Debug.LogWarning("SplineWalker doesn't have a spline!");
             }
 
-            m_Duration = m_Speed * m_Spline.GetTotalLength();
+            CalculateDuration();
+            GlobalGameManager.Instance.GameResetEvent += OnGameReset;
+        }
+
+        private void OnDestroy()
+        {
+            if (GlobalGameManager.Instance != null)
+                GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
         }
 
         public override void Move()
@@ -44,6 +55,16 @@ namespace Schmup
             }
 
             transform.position = m_Spline.GetPoint(m_Progress);
+        }
+
+        private void CalculateDuration()
+        {
+            m_Duration = m_Speed * m_Spline.GetTotalLength();
+        }
+
+        private void OnGameReset()
+        {
+            m_Progress = 0.0f;
         }
     }
 }

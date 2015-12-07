@@ -8,9 +8,15 @@ namespace Schmup
     public class CreateScriptableObject
     {
         [MenuItem("Assets/Create/Schmup/Pattern")]
-        public static void CreateUnit()
+        public static void CreatePattern()
         {
             CreateAsset<Pattern>();
+        }
+
+        [MenuItem("Assets/Create/Schmup/BulletDefinition")]
+        public static void CreateBulletDefinition()
+        {
+            CreateAsset<BulletDefinition>();
         }
 
         public static void CreateAsset<T>() where T : ScriptableObject

@@ -16,24 +16,10 @@ namespace Schmup
     public class BulletSpawnDefinition
     {
         [SerializeField]
-        private Sprite m_Sprite;
-        public Sprite Sprite
+        private BulletDefinition m_BulletDefinition;
+        public BulletDefinition BulletDefinition
         {
-            get { return m_Sprite; }
-        }
-
-        [SerializeField]
-        private float m_Speed;
-        public float Speed
-        {
-            get { return m_Speed; }
-        }
-
-        [SerializeField]
-        private int m_Damage;
-        public int Damage
-        {
-            get { return m_Damage; }
+            get { return m_BulletDefinition; }
         }
 
         [SerializeField]
