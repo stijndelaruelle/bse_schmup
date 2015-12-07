@@ -57,7 +57,8 @@ namespace Schmup
 
         private void OnDestroy()
         {
-            GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
+            if (GlobalGameManager.Instance != null)
+                GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
 
             foreach (IScoreable scoreable in m_Scoreables)
             {

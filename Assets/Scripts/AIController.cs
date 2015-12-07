@@ -18,8 +18,6 @@ namespace Schmup
         [SerializeField]
         private Pool m_DeathEffectPool;
 
-
-
         private void Awake()
         {
         }
@@ -30,8 +28,17 @@ namespace Schmup
             m_DamageableObject.DeathEvent += OnDeath;
         }
 
+        private void OnDestroy()
+        {
+            m_DamageableObject.DamageEvent -= OnDamage;
+            m_DamageableObject.DeathEvent -= OnDeath;
+        }
+
         private void Update()
         {
+            if (!IsOnScreen())
+                return;
+
             HandleMovement();
             HandleShooting();
         }
@@ -76,6 +83,17 @@ namespace Schmup
                 m_DeathEffectPool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
 
             gameObject.SetActive(false);
+        }
+
+        private bool IsOnScreen()
+        {
+            float offset = 0.1f;
+
+            Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
+            return !(viewPos.x < (0.0f - offset) ||
+                     viewPos.x > (1.0f + offset) ||
+                     viewPos.y < (0.0f - offset) || 
+                     viewPos.y > (1.0f + offset));
         }
     }
 }

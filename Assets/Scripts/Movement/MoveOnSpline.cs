@@ -19,6 +19,10 @@ namespace Schmup
             }
         }
 
+        [SerializeField]
+        private bool m_UseBackAndForth;
+        private int m_MoveDirection = 1;
+
         private float m_Duration;
         private float m_Progress;
 
@@ -41,12 +45,26 @@ namespace Schmup
 
         public override void Move()
         {
-            m_Progress += Time.deltaTime / m_Duration;
-            if (m_Progress > 1f)
+            m_Progress += (Time.deltaTime / m_Duration) * m_MoveDirection;
+
+            if (m_Progress < 0.0f)
             {
+                if (m_UseBackAndForth)
+                {
+                    m_MoveDirection *= -1;
+                }
+            }
+
+            if (m_Progress > 1.0f)
+            {
+                //TODO: FIX DIRTYNESS
                 if (m_Spline.GetLoop() == true)
                 {
                     m_Progress = 0.0f;
+                }
+                else if (m_UseBackAndForth)
+                {
+                    m_MoveDirection *= -1;
                 }
                 else
                 {
@@ -59,7 +77,7 @@ namespace Schmup
 
         private void CalculateDuration()
         {
-            m_Duration = m_Speed * m_Spline.GetTotalLength();
+            m_Duration = (1.0f / m_Speed) * m_Spline.GetTotalLength();
         }
 
         private void OnGameReset()

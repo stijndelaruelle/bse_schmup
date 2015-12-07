@@ -9,9 +9,6 @@ namespace Schmup
     {
         //Datamembers
         [SerializeField]
-        private Collider2D m_Collider;
-
-        [SerializeField]
         private int m_MaxHealth;
         public int MaxHealth
         {
@@ -71,9 +68,6 @@ namespace Schmup
 
 	    private void Start()
         {
-	        if (m_Collider == null)
-                Debug.LogError("DamagealbeObject doesn't contain a collider!");
-
             GlobalGameManager.Instance.GameResetEvent += OnGameReset;
 	    }
 
