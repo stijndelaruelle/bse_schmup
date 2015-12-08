@@ -124,8 +124,8 @@ namespace Schmup
 
         private void Update()
         {
-            Vector3 forward = transform.TransformDirection(Vector3.up) * 10;
-            Debug.DrawRay(transform.position, forward, Color.yellow);
+            //Vector3 forward = transform.TransformDirection(Vector3.up) * 10;
+            //Debug.DrawRay(transform.position, forward, Color.yellow);
         }
 
         private void OnGameReset()

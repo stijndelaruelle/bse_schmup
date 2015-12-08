@@ -62,7 +62,8 @@ namespace Schmup
 
         private void OnDestroy()
         {
-            GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
+            if (GlobalGameManager.Instance != null)
+                GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
         }
 
         private void Update()
