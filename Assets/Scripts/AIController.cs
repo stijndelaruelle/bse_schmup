@@ -87,13 +87,14 @@ namespace Schmup
 
         private bool IsOnScreen()
         {
-            float offset = 0.1f;
-
+            float xOffset = 1.0f;
+            float yOffset = 0.1f;
+            
             Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
-            return !(viewPos.x < (0.0f - offset) ||
-                     viewPos.x > (1.0f + offset) ||
-                     viewPos.y < (0.0f - offset) || 
-                     viewPos.y > (1.0f + offset));
+            return !(viewPos.x < (0.0f - xOffset) ||
+                     viewPos.x > (1.0f + xOffset) ||
+                     viewPos.y < (0.0f - yOffset) ||
+                     viewPos.y > (1.0f + yOffset));
         }
     }
 }

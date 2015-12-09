@@ -1,6 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Security.Cryptography;
+using System.Collections.Generic;
+using System;
+
+public struct Highscore
+{
+    public Highscore(string name, int score)
+    {
+        this.name = name;
+        this.score = score;
+    }
+
+    public string name;
+    public int score;
+}
 
 public class HighscoreSystem : MonoBehaviour
 {
@@ -10,39 +24,73 @@ public class HighscoreSystem : MonoBehaviour
     [SerializeField]
     private string m_GetHighscoreURL;
 
+    private List<Highscore> m_Highscores;
+    public List<Highscore> Highscores
+    {
+        get { return m_Highscores; }
+    }
+
     private string m_SecretKey = "sbasletsscamlhtuspasletcsraelttkey"; //bseschmupsecretkey with salt in between
+
+    private Action m_HighscorePostedEvent;
+    public Action HighscorePostedEvent
+    {
+        get { return m_HighscorePostedEvent; }
+        set { m_HighscorePostedEvent = value; }
+    }
+
+    private Action m_HighscoreUpdatedEvent;
+    public Action HighscoreUpdatedEvent
+    {
+        get { return m_HighscoreUpdatedEvent; }
+        set { m_HighscoreUpdatedEvent = value; }
+    }
 
     public void Start()
     {
-        //Debug
-        //PostHighscore("Jessica", 3685);
+        m_Highscores = new List<Highscore>();
     }
 
-    public void PostHighscore(string name, int score)
+    public void PostHighscore(string name, string email, int score)
     {
-        StartCoroutine(PostHighscoreRoutine(name, score));
+        StartCoroutine(PostHighscoreRoutine(name, email, score));
     }
 
-    public void GetHighscores()
+    public void UpdateHighscores()
     {
-        StartCoroutine(GetHighscoreRoutine());
+        StartCoroutine(UpdateHighscoresRoutine());
     }
 
-    private IEnumerator PostHighscoreRoutine(string name, int score)
+    public Highscore GetHighscore(int highscoreID)
     {
-        string hash = Md5Sum(name + score + m_SecretKey);
-        string postUrl = m_AddHighscoreURL + "?name=" + WWW.EscapeURL(name) + "&score=" + score + "&hash=" + hash;
+        if (highscoreID >= 0 && highscoreID < m_Highscores.Count)
+        {
+            return m_Highscores[highscoreID];
+        }
+
+        return new Highscore("Empty", 0);
+    }
+
+    private IEnumerator PostHighscoreRoutine(string name, string email, int score)
+    {
+        string hash = Md5Sum(name + score + email + m_SecretKey);
+        string postUrl = m_AddHighscoreURL + "?name=" + WWW.EscapeURL(name) + "&score=" + score + "&email=" + WWW.EscapeURL(email) + "&hash=" + hash;
 
         WWW highscorePost = new WWW(postUrl);
         yield return highscorePost;
 
         if (highscorePost.error != null)
         {
-            print("There was an error posting the high score: " + highscorePost.error);
+            Debug.Log("There was an error posting the high score: " + highscorePost.error);
+        }
+        else
+        {
+            if (m_HighscorePostedEvent != null)
+                m_HighscorePostedEvent();
         }
     }
 
-    private IEnumerator GetHighscoreRoutine()
+    private IEnumerator UpdateHighscoresRoutine()
     {
         Debug.Log("Loading Scores");
 
@@ -51,11 +99,29 @@ public class HighscoreSystem : MonoBehaviour
 
         if (highscoreGet.error != null)
         {
-            Debug.Log("There was an error getting the high score: " + highscoreGet.error);
+            Debug.Log("There was an error getting the highscores: " + highscoreGet.error);
         }
         else
         {
-            Debug.Log(highscoreGet.text);
+            //Split the string (comma separated)
+            char[] delimiterChars = { ',' };
+            string[] words = highscoreGet.text.Split(delimiterChars);
+
+            m_Highscores.Clear();
+            for (int i = 0; i < words.Length; i += 2)
+            {
+                if (String.IsNullOrEmpty(words[i]))
+                    continue;
+
+                Highscore highscore = new Highscore();
+                highscore.name = words[i];
+                bool success = int.TryParse(words[i + 1], out highscore.score);
+
+                m_Highscores.Add(highscore);
+            }
+
+            if (m_HighscoreUpdatedEvent != null)
+                m_HighscoreUpdatedEvent();
         }
     }
 

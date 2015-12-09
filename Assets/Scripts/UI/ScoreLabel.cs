@@ -27,18 +27,22 @@ namespace Schmup
             {
                 case ScoreSystem.ScoreType.TotalScore:
                     m_ScoreSystem.TotalScoreUpdateEvent += OnScoreUpdate;
+                    m_TargetScore = m_ScoreSystem.TotalScore;
                     break;
 
                 case ScoreSystem.ScoreType.CurrentScore:
                     m_ScoreSystem.CurrentScoreUpdateEvent += OnScoreUpdate;
+                    m_TargetScore = m_ScoreSystem.CurrentScore;
                     break;
 
                 case ScoreSystem.ScoreType.Multiplier:
                     m_ScoreSystem.MultiplierUpdateEvent += OnScoreUpdate;
+                    m_TargetScore = m_ScoreSystem.Multiplier;
                     break;
 
                 default:
                     m_ScoreSystem.TotalScoreUpdateEvent += OnScoreUpdate;
+                    m_TargetScore = m_ScoreSystem.TotalScore;
                     break;
             }
         }

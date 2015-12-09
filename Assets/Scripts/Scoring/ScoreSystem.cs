@@ -17,8 +17,22 @@ namespace Schmup
         private IScoreable[] m_Scoreables;
 
         private int m_TotalScore;
+        public int TotalScore
+        {
+            get { return m_TotalScore; }
+        }
+
         private int m_CurrentScore; //Score during the current streak
+        public int CurrentScore
+        {
+            get { return m_CurrentScore; }
+        }
+
         private int m_Multiplier;
+        public int Multiplier
+        {
+            get { return m_Multiplier; }
+        }
 
         private Action<int> m_TotalScoreUpdateEvent;
         public Action<int> TotalScoreUpdateEvent
@@ -60,9 +74,12 @@ namespace Schmup
             if (GlobalGameManager.Instance != null)
                 GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
 
-            foreach (IScoreable scoreable in m_Scoreables)
+            if (m_Scoreables != null)
             {
-                scoreable.ScoreEvent -= OnScore;
+                foreach (IScoreable scoreable in m_Scoreables)
+                {
+                    scoreable.ScoreEvent -= OnScore;
+                }
             }
         }
 

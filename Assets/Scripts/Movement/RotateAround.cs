@@ -13,9 +13,29 @@ namespace Schmup
             set { m_RotationSpeed = value; }
         }
 
+        private float m_DefaultRotationSpeed;
+
+        private void Start()
+        {
+            m_DefaultRotationSpeed = m_RotationSpeed;
+            GlobalGameManager.Instance.GameResetEvent += OnGameReset;
+        }
+
+        private void OnDestroy()
+        {
+            if (GlobalGameManager.Instance != null)
+                GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
+        }
+
+
         public override void Move()
         {
             transform.Rotate(new Vector3(0.0f, 0.0f, 1.0f), m_RotationSpeed * Time.deltaTime);
+        }
+
+        private void OnGameReset()
+        {
+            m_RotationSpeed = m_DefaultRotationSpeed;
         }
     }
 }

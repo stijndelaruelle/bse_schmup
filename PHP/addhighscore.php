@@ -2,9 +2,9 @@
     require("mysql_info.php");
 
     // Strings must be escaped to prevent SQL injection attack. 
-    $name = mysql_real_escape_string($_GET['name']); 
+    $name = mysql_real_escape_string($_GET['name']);
     $score = mysql_real_escape_string($_GET['score']);
-    //$email = mysql_real_escape_string($_GET['email'], $db);
+    $email = mysql_real_escape_string($_GET['email']);
     $hash = $_GET['hash']; 
 
     //check for a valid e-mail adress
@@ -13,13 +13,13 @@
 
     $secretKey = "sbasletsscamlhtuspasletcsraelttkey"; //bseschmupsecretkey with salt in between
 
-    $real_hash = md5($name . $score . $secretKey);
+    $real_hash = md5($name . $score . $email . $secretKey);
     $ip = $_SERVER['REMOTE_ADDR'];
 
     if($real_hash == $hash)
     {
     mysql_query("INSERT INTO BlackSunEmpire_Schmup (id, name, score, email, date, ip)
-                 VALUES('', '$name', '$score', '', now(), '$ip')");
+                 VALUES('', '$name', '$score', '$email', now(), '$ip')");
     }
     else
     {

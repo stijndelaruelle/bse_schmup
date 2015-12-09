@@ -11,6 +11,9 @@ namespace Schmup
         private List<PlayerController> m_Players;
         private int m_DeathPlayers;
 
+        [SerializeField]
+        private DamageableObject m_Boss;
+
         private event Action m_GameStartEvent;
         public Action GameStartEvent
         {
@@ -34,6 +37,13 @@ namespace Schmup
             set { m_GameOverEvent = value; }
         }
 
+        private event Action m_GameCompleteEvent;
+        public Action GameCompleteEvent
+        {
+            get { return m_GameCompleteEvent; }
+            set { m_GameCompleteEvent = value; }
+        }
+
         private void Start()
         {
             foreach(PlayerController player in m_Players)
@@ -41,7 +51,8 @@ namespace Schmup
                 player.DeathEvent += OnPlayerDeath;
             }
 
-            StartGame();
+            m_Boss.DeathEvent += OnBossDeath;
+            Time.timeScale = 0.0f;
         }
 
         protected override void OnDestroy()
@@ -51,6 +62,17 @@ namespace Schmup
             foreach (PlayerController player in m_Players)
             {
                 player.DeathEvent -= OnPlayerDeath;
+            }
+            m_Players.Clear();
+
+            m_Boss.DeathEvent -= OnBossDeath;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.R) && Time.timeScale == 1.0f)
+            {
+                RestartGame();
             }
         }
 
@@ -62,6 +84,11 @@ namespace Schmup
             {
                 GameOver();
             }
+        }
+
+        private void OnBossDeath()
+        {
+            GameComplete();
         }
 
         private void StartGame()
@@ -78,16 +105,28 @@ namespace Schmup
             if (m_GameOverEvent != null)
                 m_GameOverEvent();
 
-            StartCoroutine(GameOverSlowMotionRoutine());
+            StartCoroutine(GameDownSlowMotionRoutine(0.5f, 1.0f));
         }
 
-        private IEnumerator GameOverSlowMotionRoutine()
+        private void GameComplete()
         {
-            float timeScale = 0.5f;
+            if (m_GameCompleteEvent != null)
+                m_GameCompleteEvent();
+
+            StartCoroutine(GameDownSlowMotionRoutine(0.5f, 0.5f));
+        }
+
+        //FIX ME: Should not be in the game manager
+        private IEnumerator GameDownSlowMotionRoutine(float startValue, float speed)
+        {
+            float timeScale = startValue;
 
             while (timeScale > 0.0f)
             {
-                timeScale -= Time.deltaTime;
+                timeScale -= speed * Time.deltaTime;
+                if (timeScale < 0.0f)
+                    timeScale = 0.0f;
+
                 Time.timeScale = timeScale;
                 yield return new WaitForEndOfFrame();
             }

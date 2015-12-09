@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace Schmup
 {
@@ -18,11 +19,31 @@ namespace Schmup
 
         [SerializeField]
         private DamageableObject m_DamageableObject;
+        public DamageableObject DamageableObject
+        {
+            get { return m_DamageableObject; }
+        }
 
         [SerializeField]
         private Pool m_DeathEffectPool;
         private bool m_ChangingPhase = false;
         private bool m_ChangedPhase = false;
+
+        private event Action m_EnableEvent;
+        public Action EnableEvent
+        {
+            get { return m_EnableEvent; }
+            set { m_EnableEvent = value; }
+        }
+
+        private event Action m_DisableEvent;
+        public Action DisableEvent
+        {
+            get { return m_DisableEvent; }
+            set { m_DisableEvent = value; }
+        }
+
+        private bool m_IsEnabled = false;
 
         private void Start()
         {
@@ -30,17 +51,23 @@ namespace Schmup
 
             m_DamageableObject.DamageEvent += OnDamage;
             m_DamageableObject.DeathEvent += OnDeath;
+            GlobalGameManager.Instance.GameResetEvent += OnGameReset;
         }
 
         private void OnDestroy()
         {
             m_DamageableObject.DamageEvent -= OnDamage;
             m_DamageableObject.DeathEvent -= OnDeath;
+
+            if (GlobalGameManager.Instance != null)
+                GlobalGameManager.Instance.GameResetEvent -= OnGameReset;
         }
 
         private void Update()
         {
-            if (!IsOnScreen())
+            EnableIfOnScreen();
+
+            if (!m_IsEnabled)
                 return;
 
             HandleMovement();
@@ -79,6 +106,56 @@ namespace Schmup
             }
         }
 
+        private void OnDeath()
+        {
+            if (m_DeathEffectPool)
+                m_DeathEffectPool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
+
+            gameObject.SetActive(false);
+        }
+
+        private void EnableIfOnScreen()
+        {
+            if (IsOnScreen())
+            {
+                if (!m_IsEnabled)
+                {
+                    if (m_EnableEvent != null)
+                        m_EnableEvent();
+                }
+
+                m_IsEnabled = true;
+            }
+            else
+            {
+                if (m_IsEnabled)
+                {
+                    if (m_DisableEvent != null)
+                        m_DisableEvent();
+                }
+
+                m_IsEnabled = false;
+            }
+        }
+
+        private bool IsOnScreen()
+        {
+            float offset = 0.1f;
+
+            Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
+            return !(viewPos.x < (0.0f - offset) ||
+                     viewPos.x > (1.0f + offset) ||
+                     viewPos.y < (0.0f - offset) ||
+                     viewPos.y > (1.0f + offset));
+        }
+
+        private void OnGameReset()
+        {
+            m_ChangingPhase = false;
+            m_ChangedPhase = false;
+            m_Guns = m_Phase1Guns;
+        }
+
         private IEnumerator EnterPhase2Routine()
         {
             m_ChangingPhase = true;
@@ -94,23 +171,5 @@ namespace Schmup
             m_Guns = m_Phase2Guns;
         }
 
-        private void OnDeath()
-        {
-            if (m_DeathEffectPool)
-                m_DeathEffectPool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
-
-            gameObject.SetActive(false);
-        }
-
-        private bool IsOnScreen()
-        {
-            float offset = 0.1f;
-
-            Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
-            return !(viewPos.x < (0.0f - offset) ||
-                     viewPos.x > (1.0f + offset) ||
-                     viewPos.y < (0.0f - offset) ||
-                     viewPos.y > (1.0f + offset));
-        }
     }
 }
