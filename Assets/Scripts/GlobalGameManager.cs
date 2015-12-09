@@ -82,13 +82,14 @@ namespace Schmup
 
             if (m_DeathPlayers >= m_Players.Count)
             {
-                GameOver();
+                StartCoroutine(DelayRoutine(1.0f, GameOver));
+                GlobalEffects.Instance.Screenshake.StartShake(1.0f, 1.0f);
             }
         }
 
         private void OnBossDeath()
         {
-            GameComplete();
+            StartCoroutine(DelayRoutine(1.5f, GameComplete));
         }
 
         private void StartGame()
@@ -117,6 +118,12 @@ namespace Schmup
         }
 
         //FIX ME: Should not be in the game manager
+        private IEnumerator DelayRoutine(float delay, Action function)
+        {
+            yield return new WaitForSeconds(delay);
+            function();
+        }
+
         private IEnumerator GameDownSlowMotionRoutine(float startValue, float speed)
         {
             float timeScale = startValue;

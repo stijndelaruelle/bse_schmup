@@ -18,6 +18,12 @@ namespace Schmup
         [SerializeField]
         private Pool m_DeathEffectPool;
 
+        [SerializeField]
+        private float m_ScreenshakeStrength;
+
+        [SerializeField]
+        private float m_ScreenshakeLength;
+
         private void Awake()
         {
         }
@@ -83,6 +89,8 @@ namespace Schmup
                 m_DeathEffectPool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
 
             gameObject.SetActive(false);
+
+            GlobalEffects.Instance.Screenshake.StartShake(m_ScreenshakeStrength, m_ScreenshakeLength);
         }
 
         private bool IsOnScreen()

@@ -29,6 +29,12 @@ namespace Schmup
         private bool m_ChangingPhase = false;
         private bool m_ChangedPhase = false;
 
+        [SerializeField]
+        private float m_ScreenshakeStrength;
+
+        [SerializeField]
+        private float m_ScreenshakeLength;
+
         private event Action m_EnableEvent;
         public Action EnableEvent
         {
@@ -42,6 +48,7 @@ namespace Schmup
             get { return m_DisableEvent; }
             set { m_DisableEvent = value; }
         }
+
 
         private bool m_IsEnabled = false;
 
@@ -112,6 +119,7 @@ namespace Schmup
                 m_DeathEffectPool.ActivateAvailableObject(m_DamageableObject.transform.position, m_DamageableObject.transform.rotation);
 
             gameObject.SetActive(false);
+            GlobalEffects.Instance.Screenshake.StartShake(m_ScreenshakeStrength, m_ScreenshakeLength);
         }
 
         private void EnableIfOnScreen()
