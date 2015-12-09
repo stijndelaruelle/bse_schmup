@@ -36,8 +36,11 @@ namespace Schmup
 
         private void OnDestroy()
         {
-            m_DamageableObject.HealEvent -= OnHeal;
-            m_DamageableObject.DamageEvent -= OnDamage;
+            if (m_DamageableObject != null)
+            {
+                m_DamageableObject.HealEvent -= OnHeal;
+                m_DamageableObject.DamageEvent -= OnDamage;
+            }
 
             for (int i = 0; i < m_HealthIcons.Count; ++i)
             {
